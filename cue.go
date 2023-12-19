@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
-
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/cue/parser"
+	"github.com/charmbracelet/log"
 )
 
 type ClusterConfig struct {
@@ -46,14 +45,14 @@ func (reader CueReader) ReadFile(filepath string) (cue.Value, error) {
 
 	f, err := parser.ParseFile(filepath, nil)
 	if err != nil {
-		fmt.Println(err) // TODO: Implement logging
+		log.Error(err.Error())
 		return cue.Value{}, err
 	}
 
 	values := ctx.BuildFile(f)
 	err = values.Validate()
 	if err != nil {
-		fmt.Println(err) // TODO: Implement logging
+		log.Error(err.Error())
 		return cue.Value{}, err
 	}
 	return values, nil
